@@ -15,6 +15,7 @@
         }
     ],
     "require": {
-        "symfony/http-foundation": "^7.1"
+        "symfony/http-foundation": "^7.1",
+        "twig/twig": "^3.14"
     }
 }
