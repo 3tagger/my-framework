@@ -14,5 +14,7 @@
             "email": "3tagger95@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "symfony/http-foundation": "^7.1"
+    }
 }
