@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "3tagger\\MyFramework\\": "src/"
+            "ThreeTagger\\MyFramework\\": "src/"
         }
     },
     "authors": [
