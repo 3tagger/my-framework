@@ -1,0 +1,18 @@
+{
+    "name": "3tagger/my-framework",
+    "description": "This is my own framework, created within a weekend",
+    "type": "framework",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "3tagger\\MyFramework\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andri Winata",
+            "email": "3tagger95@gmail.com"
+        }
+    ],
+    "require": {}
+}
