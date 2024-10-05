@@ -1,5 +1,11 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\HttpFoundation\Request;
+
+$request = Request::createFromGlobals();
+$name = $request->get('name');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +17,7 @@ require __DIR__ . '/../vendor/autoload.php';
 </head>
 
 <body>
-    <h1>Hi there!</h1>
+    <h1>Hi there <?= $name ?> !</h1>
 </body>
 
 </html>
