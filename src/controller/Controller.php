@@ -2,40 +2,23 @@
 
 namespace ThreeTagger\MyFramework\Controller;
 
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
-use ThreeTagger\MyFramework\Utils\Path;
-use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
 use League\Flysystem\Filesystem;
 
 class Controller
 {
-    protected const NOT_FOUND_PAGE = '404.html';
-    protected const INDEX_PAGE = 'index.html';
-    protected const PATH_TO_DATA = 'data';
-    protected const PATH_TO_TEMPLATES = 'templates';
-    protected const VARIABLE_MENU_FILE = 'menu.json';
     protected const DEFAULT_PAGE = 'index';
-    protected $filesystem;
-    protected $variables;
-    protected $menu;
-    protected $twig;
+    protected const INDEX_PAGE = 'index.html';
+    protected Filesystem $filesystem;
+    protected array $menu;
+    protected Environment $twig;
 
-    public function __construct()
+    public function __construct(Filesystem $filesystem, Environment $twig, array $variables)
     {
-        $adapter = new LocalFilesystemAdapter(Path::GetFromBasePath($this::PATH_TO_DATA));
-        $this->filesystem = new Filesystem($adapter);
-
-        $jsonVariables = $this->filesystem->read($this::VARIABLE_MENU_FILE);
-        $this->variables = [];
-        $this->variables['menu'] = json_decode($jsonVariables, true);
-
-        $this->menu = $this->variables['menu'];
-
-
-        $loader = new FilesystemLoader(Path::GetFromBasePath($this::PATH_TO_TEMPLATES));
-        $this->twig = new Environment($loader);
+        $this->filesystem = $filesystem;
+        $this->menu = $variables['menu'];
+        $this->twig = $twig;
     }
 
     public function get($path)
