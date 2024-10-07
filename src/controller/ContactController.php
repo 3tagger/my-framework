@@ -3,9 +3,7 @@
 namespace ThreeTagger\MyFramework\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use ThreeTagger\MyFramework\Utils\Path;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 class ContactController
 {

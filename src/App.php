@@ -2,8 +2,9 @@
 
 namespace ThreeTagger\MyFramework;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use ThreeTagger\MyFramework\Controller\ContactController;
@@ -19,46 +20,29 @@ class App
     protected const PATH_TO_TEMPLATES = 'templates';
     protected const VARIABLE_MENU_FILE = 'menu.json';
 
-    protected Filesystem $filesystem;
-    protected Environment $twig;
+    protected ContainerBuilder $container;
     protected array $variables;
     public function __construct()
     {
-        // initialize filesystem
-        $adapter = new LocalFilesystemAdapter(Path::GetFromBasePath($this::PATH_TO_DATA));
-        $this->filesystem = new Filesystem($adapter);
+        $container = new ContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator(Path::GetFromSourcePath('')));
+        $loader->load('services.yml');
 
-        // initialize twig
-        $loader = new FilesystemLoader(Path::GetFromBasePath($this::PATH_TO_TEMPLATES));
-        $this->twig = new Environment($loader);
-
-        // get variables
-        $this->variables = $this->getVariables();
-    }
-
-    public function getVariables(): array
-    {
-        $jsonVariables = $this->filesystem->read($this::VARIABLE_MENU_FILE);
-
-        $variables = [];
-        $variables['menu'] = json_decode($jsonVariables, true);
-
-        return $variables;
+        $this->container = $container;
     }
 
     public function run(Request $request): Response
     {
         $path = $request->getPathInfo();
 
-        $controller = new Controller($this->filesystem, $this->twig, $this->variables);
-
         switch ($path) {
             case "/":
             case "/index":
             case "/about":
+                $controller = $this->container->get('basic_controller');
                 return $controller->get($path);
             case "/contact":
-                $controller = new ContactController($this->twig);
+                $controller = $this->container->get('contact_controller');
 
                 $method = $request->getMethod();
                 if ($method == Request::METHOD_POST) {
@@ -66,8 +50,10 @@ class App
                 }
 
                 return $controller->get();
+            default:
         }
 
+        $controller = $this->container->get('basic_controller');
         return new Response($controller->notFoundPage(), Response::HTTP_NOT_FOUND);
     }
 }

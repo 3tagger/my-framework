@@ -1,0 +1,12 @@
+{
+    "menu": {
+        "index": {
+            "title": "Index Page",
+            "content": "This is the index page"
+        },
+        "about": {
+            "title": "About Page",
+            "content": "This is my attempt to create my own framework (by reading a book)"
+        }
+    }
+}

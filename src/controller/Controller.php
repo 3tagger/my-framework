@@ -2,23 +2,26 @@
 
 namespace ThreeTagger\MyFramework\Controller;
 
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\Response;
+use ThreeTagger\MyFramework\Service\ConfigService;
 use Twig\Environment;
-use League\Flysystem\Filesystem;
 
 class Controller
 {
     protected const DEFAULT_PAGE = 'index';
     protected const INDEX_PAGE = 'index.html';
-    protected Filesystem $filesystem;
+    protected FilesystemOperator $filesystem;
     protected array $menu;
     protected Environment $twig;
 
-    public function __construct(Filesystem $filesystem, Environment $twig, array $variables)
+    public function __construct(FilesystemOperator $filesystem, Environment $twig, ConfigService $configService)
     {
         $this->filesystem = $filesystem;
-        $this->menu = $variables['menu'];
         $this->twig = $twig;
+
+        $config = $configService->getConfig();
+        $this->menu = $config['menu'];
     }
 
     public function get($path)

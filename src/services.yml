@@ -1,0 +1,26 @@
+parameters:
+  template_dir: '../templates'
+  data_dir: '../data'
+
+services:
+  loader:
+    class: Twig\Loader\FilesystemLoader
+    arguments: ['%template_dir%']
+  twig:
+    class: Twig\Environment
+    arguments: ['@loader']
+  adapter:
+    class: League\Flysystem\Local\LocalFilesystemAdapter
+    arguments: ['%data_dir%']
+  filesystem:
+    class: League\Flysystem\Filesystem
+    arguments: ['@adapter']
+  config: 
+    class: ThreeTagger\MyFramework\Service\ConfigService
+    arguments: ['@filesystem']
+  basic_controller:
+    class: ThreeTagger\MyFramework\Controller\Controller
+    arguments: ['@filesystem', '@twig', '@config']
+  contact_controller:
+    class: ThreeTagger\MyFramework\Controller\ContactController
+    arguments: ['@twig']
